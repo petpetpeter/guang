@@ -177,7 +177,7 @@ void comp_p( double**p, double**p_new, double**p_rhs, double dx, double dy,  int
     }
     for ( int j=0; j<=nx-1; j++){
       p_new[0][j] = p[1][j];
-      p_new[ny-1][j] = p[ny-2][j]; // pressure strip for north and south bound 
+      p_new[ny-1][j] = 0;//p[ny-2][j]; // pressure strip for north and south bound 
     }
     
     double sum_rsqr = 0;
@@ -321,21 +321,21 @@ void write_result(double **var, int nx, int ny, int ts){
 }       
 int main(){
 
-  int nx = 101;
+  int nx = 110;
   int ny = 11;
-  double dx = 0.1;
-  double dy = 0.1;
+  double dx = 0.3;
+  double dy = 0.3;
   double donor = 0;
   double gx = 0;
   double gy = 0;
-  int t_max = 1000;
+  int t_max = 5500;
   int it_max = 1000; //for poisson iteration
   double eps = 0.00001; //for poisson iteration
 
 
   
   double u_in = 1;
-  double Re = (1*u_in*ny*dy)/0.1;//1500;
+  double Re = (10*u_in*ny*dy)/0.089;//1500;
   
   //double ts = Re/((1/pow(dx,2))+(1/pow(dy,2)))/2*1.1; // choose ts based on 3.5 with a sf of 1.1
   double ts = 0.01;
