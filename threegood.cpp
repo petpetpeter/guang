@@ -155,21 +155,21 @@ void comp_FG(double***u, double***v, double***w, double***F, double***G, double*
   // --------------------------------------------------------for F
 
   
-  for ( int i = 1; i <= nx-3; i++){
+  for ( int i = 1; i <= nx-2; i++){
     for ( int j = 1; j <= ny-2; j++){
       for ( int k = 1; k <= nz-2; k++){
 
-	double duu_dx = ( ( pow(((u[i][j][k]+u[i+1][j][k])/2),2) - pow(((u[i-1][j][k]+u[i][j][k])/2),2) ) / dx )  + (donor/dx)*( abs(u[i][j][k]+u[i+1][j][k])*(u[i][j][k]-u[i+1][j][k])/4 - abs(u[i-1][j][k]+u[i][j][k])*(u[i-1][j][k]-u[i][j][k])/4 ) ;
+	double duu_dx = ( ( pow(((u[i][j][k]+u[i+1][j][k])/2.0),2) - pow(((u[i-1][j][k]+u[i][j][k])/2.0),2) ) / dx )  + (donor/dx)*( abs(u[i][j][k]+u[i+1][j][k])*(u[i][j][k]-u[i+1][j][k])/4.0 - abs(u[i-1][j][k]+u[i][j][k])*(u[i-1][j][k]-u[i][j][k])/4.0 ) ;
 
-	double duv_dy = ( ( (v[i][j][k]+v[i+1][j][k])*(u[i][j][k]+u[i][j+1][k])/4 - (v[i][j-1][k]+v[i+1][j-1][k])*(u[i][j-1][k]+u[i][j][k])/4 ) / dy )  +(donor/dy)*( abs(v[i][j][k]+v[i+1][j][k])*(u[i][j][k]-u[i][j+1][k])/4 - abs(v[i][j-1][k] + v[i+1][j-1][k])*(u[i][j-1][k]-u[i][j][k])/4 ) ;
+	double duv_dy = ( ( (v[i][j][k]+v[i+1][j][k])*(u[i][j][k]+u[i][j+1][k])/4.0 - (v[i][j-1][k]+v[i+1][j-1][k])*(u[i][j-1][k]+u[i][j][k])/4.0 ) / dy )  +(donor/dy)*( abs(v[i][j][k]+v[i+1][j][k])*(u[i][j][k]-u[i][j+1][k])/4.0 - abs(v[i][j-1][k] + v[i+1][j-1][k])*(u[i][j-1][k]-u[i][j][k])/4.0 ) ;
 
-	double duw_dz = ( ( (w[i][j][k]+w[i+1][j][k])*(u[i][j][k]+u[i][j][k+1])/4 - (w[i][j][k-1]+w[i+1][j][k-1])*(u[i][j][k-1]+u[i][j][k])/4 ) / dz )  +(donor/dz)*( abs(w[i][j][k]+w[i+1][j][k])*(u[i][j][k]-u[i][j][k+1])/4 - abs(w[i][j][k-1] + w[i+1][j][k-1])*(u[i][j][k-1]-u[i][j][k])/4 ) ;
+	double duw_dz = ( ( (w[i][j][k]+w[i+1][j][k])*(u[i][j][k]+u[i][j][k+1])/4.0 - (w[i][j][k-1]+w[i+1][j][k-1])*(u[i][j][k-1]+u[i][j][k])/4.0 ) / dz )  +(donor/dz)*( abs(w[i][j][k]+w[i+1][j][k])*(u[i][j][k]-u[i][j][k+1])/4.0 - abs(w[i][j][k-1] + w[i+1][j][k-1])*(u[i][j][k-1]-u[i][j][k])/4.0) ;
 
-	double ddu_dxdx = (u[i+1][j][k] -2*u[i][j][k] + u[i-1][j][k])/ pow(dx,2);
-	double ddu_dydy = (u[i][j+1][k] -2*u[i][j][k] + u[i][j-1][k])/ pow(dy,2);
-	double ddu_dzdz = (u[i][j][k+1] -2*u[i][j][k] + u[i][j][k-1])/ pow(dz,2);
+	double ddu_dxdx = (u[i+1][j][k] -2.0*u[i][j][k] + u[i-1][j][k])/ pow(dx,2);
+	double ddu_dydy = (u[i][j+1][k] -2.0*u[i][j][k] + u[i][j-1][k])/ pow(dy,2);
+	double ddu_dzdz = (u[i][j][k+1] -2.0*u[i][j][k] + u[i][j][k-1])/ pow(dz,2);
 
-
+  //cout << "f/re = " << (ddu_dxdx+ddu_dydy+ddu_dzdz)/Re  <<"\n"; //- (ts/dx)*(p_new[i+1][j][k] - p_new[i][j][k]) << "\n";
 	F[i][j][k] = u[i][j][k] + ts*((ddu_dxdx+ddu_dydy+ddu_dzdz)/Re - duu_dx - duv_dy - duw_dz + gx);
       }
     }
@@ -179,19 +179,19 @@ void comp_FG(double***u, double***v, double***w, double***F, double***G, double*
   //---------------------------------------------for G
 
 
-  for ( int j = 1; j <= ny-3; j++){
+  for ( int j = 1; j <= ny-2; j++){
     for ( int i = 1; i <= nx-2; i++){
       for ( int k = 1; k <= nz-2; k++){
 
-	double dvv_dy = ( ( pow(((v[i][j][k]+v[i][j+1][k])/2),2) - pow(((v[i][j-1][k]+v[i][j][k])/2),2) ) / dy )  + (donor/dy)*(abs(v[i][j][k]+v[i][j+1][k])*(v[i][j][k]-v[i][j+1][k])/4 - abs(v[i][j-1][k]+v[i][j][k])*(v[i][j-1][k]-v[i][j][k])/4 ) ;
+	double dvv_dy = ( ( pow(((v[i][j][k]+v[i][j+1][k])/2.0),2) - pow(((v[i][j-1][k]+v[i][j][k])/2.0),2) ) / dy )  + (donor/dy)*(abs(v[i][j][k]+v[i][j+1][k])*(v[i][j][k]-v[i][j+1][k])/4.0 - abs(v[i][j-1][k]+v[i][j][k])*(v[i][j-1][k]-v[i][j][k])/4.0 ) ;
 
-        double duv_dx = ( ( (v[i][j][k]+v[i+1][j][k])*(u[i][j][k]+u[i][j+1][k])/4 - (v[i-1][j][k]+v[i][j][k])*(u[i-1][j+1][k]+u[i-1][j][k])/4 ) / dx )  +(donor/dx)*( abs(u[i][j][k]+u[i][j+1][k])*(v[i][j][k]-v[i+1][j][k])/4 - abs(u[i-1][j+1][k] + u[i-1][j][k])*(v[i-1][j][k]-v[i][j][k])/4 ) ;
+        double duv_dx = ( ( (v[i][j][k]+v[i+1][j][k])*(u[i][j][k]+u[i][j+1][k])/4.0 - (v[i-1][j][k]+v[i][j][k])*(u[i-1][j+1][k]+u[i-1][j][k])/4.0 ) / dx )  +(donor/dx)*( abs(u[i][j][k]+u[i][j+1][k])*(v[i][j][k]-v[i+1][j][k])/4.0 - abs(u[i-1][j+1][k] + u[i-1][j][k])*(v[i-1][j][k]-v[i][j][k])/4.0 ) ;
 
-        double dvw_dz = ( ( (w[i][j+1][k]+w[i][j][k])*(v[i][j][k+1]+v[i][j][k])/4 - (w[i][j+1][k-1]+w[i][j][k-1])*(v[i][j][k-1]+v[i][j][k])/4 ) / dz )  +(donor/dz)*( abs(w[i][j+1][k]+w[i][j][k])*(v[i][j][k]-v[i][j][k+1])/4 - abs(w[i][j+1][k-1] + w[i][j][k-1])*(v[i][j][k-1]-v[i][j][k])/4 ) ;
+        double dvw_dz = ( ( (w[i][j+1][k]+w[i][j][k])*(v[i][j][k+1]+v[i][j][k])/4.0 - (w[i][j+1][k-1]+w[i][j][k-1])*(v[i][j][k-1]+v[i][j][k])/4.0 ) / dz )  +(donor/dz)*( abs(w[i][j+1][k]+w[i][j][k])*(v[i][j][k]-v[i][j][k+1])/4.0 - abs(w[i][j+1][k-1] + w[i][j][k-1])*(v[i][j][k-1]-v[i][j][k])/4.0 ) ;
 
-        double ddv_dxdx = (v[i+1][j][k] -2*v[i][j][k] + v[i-1][j][k])/ pow(dx,2);
-        double ddv_dydy = (v[i][j+1][k] -2*v[i][j][k] + v[i][j-1][k])/ pow(dy,2);
-        double ddv_dzdz = (v[i][j][k+1] -2*v[i][j][k] + v[i][j][k-1])/ pow(dz,2);
+        double ddv_dxdx = (v[i+1][j][k] -2.0*v[i][j][k] + v[i-1][j][k])/ pow(dx,2);
+        double ddv_dydy = (v[i][j+1][k] -2.0*v[i][j][k] + v[i][j-1][k])/ pow(dy,2);
+        double ddv_dzdz = (v[i][j][k+1] -2.0*v[i][j][k] + v[i][j][k-1])/ pow(dz,2);
 
 
         G[i][j][k] = v[i][j][k] + ts*((ddv_dxdx+ddv_dydy+ddv_dzdz)/Re - dvv_dy - duv_dx - dvw_dz + gy);
@@ -199,7 +199,7 @@ void comp_FG(double***u, double***v, double***w, double***F, double***G, double*
     }
   }
   
-  for ( int k = 1; k <= nz-3; k++){
+  for ( int k = 1; k <= nz-2; k++){
     for ( int i = 1; i <= nx-2; i++){
       for ( int j = 1; j <= ny-2; j++){
 
@@ -319,7 +319,7 @@ void comp_p( double***p, double***p_new, double***p_rhs, double dx, double dy, d
       for(int j = 1; j <= ny-2; j++){
 	for(int k = 1; k <= nz-2; k++){
 	  res[i][j][k] = ((p_new[i+1][j][k]-p_new[i][j][k]) - (p_new[i][j][k]-p_new[i-1][j][k]))/(dx*dx)
-	    +  ((p_new[i][j+1][k]-p_new[i][j][k]) - (p_new[i][j][k]-p_new[i-1][j][k]))/(dy*dy) + (p_new[i][j][k+1]-2*p_new[i][j][k]+p_new[i][j][k-1])/pow(dz,2) - p_rhs[i][j][k];
+	    +  ((p_new[i][j+1][k]-p_new[i][j][k]) - (p_new[i][j][k]-p_new[i][j-1][k]))/(dy*dy) + (p_new[i][j][k+1]-2*p_new[i][j][k]+p_new[i][j][k-1])/pow(dz,2) - p_rhs[i][j][k];
 	}
       }
     }
@@ -347,9 +347,10 @@ void comp_p( double***p, double***p_new, double***p_rhs, double dx, double dy, d
     
 void finalcomp( double***u_new, double***v_new, double***w_new,  double***F, double***G, double***H,  double***p_new, double ts, double dx, double dy, double dz, int nx, int ny, int nz)
 {
-    for (int i =0; i<=nx-2; i++){
+    for (int i =1; i<=nx-2; i++){
       for ( int j =1; j<=ny-2; j++){
 	for ( int k =1; k<= nz-2; k++){
+    //cout << "dx = " << (p_new[i+1][j][k]-p_new[i][j][k]) <<"\n"; //- (ts/dx)*(p_new[i+1][j][k] - p_new[i][j][k]) << "\n";
 	  u_new[i][j][k] = F[i][j][k] - (ts/dx)*(p_new[i+1][j][k]-p_new[i][j][k]);
 	  v_new[i][j][k] = G[i][j][k] - (ts/dy)*(p_new[i][j+1][k]-p_new[i][j][k]);
 	  w_new[i][j][k] = H[i][j][k] - (ts/dz)*(p_new[i][j][k+1]-p_new[i][j][k]);
@@ -358,6 +359,47 @@ void finalcomp( double***u_new, double***v_new, double***w_new,  double***F, dou
     }
   }
 
+void write_resultx(double*** gen, int nx, int ny, int nz, int t){
+  //var = simulated data (array)
+  //nx, ny = size (2d)
+  //ts = timestep
+  ofstream myfile;
+  string file_name = "dddsim/test_" + to_string(t) + ".vtk";
+  myfile.open(file_name);
+  // Paraview stuff
+  //Header
+  myfile << "# vtk DataFile Version 2.0\n";
+  myfile << "FlowField\n";
+  myfile << "ASCII\n";
+  // Grid
+  myfile << "DATASET STRUCTURED_GRID\n";
+  myfile << "DIMENSIONS " << nx << " " << ny << " " << nz << endl;
+  myfile << "POINTS " << (nx)*ny*(nz) << " float\n";
+  for (int k = 0; k <= nz-1; k++){
+    for (int j = 0; j <= ny-1; j++){
+		for (int i = 0; i <= nx-1; i++){		
+			myfile << i << " " << j << " " << k << endl;
+		}
+    }
+  }
+  // Dataset
+  myfile << "\n";
+  myfile << "POINT_DATA";
+  myfile << " " << (nx)*ny*(nz) << "\n";
+  // Point data
+  myfile << "\n";
+  myfile << "SCALARS Test float 1\n";
+  myfile << "LOOKUP_TABLE default\n";
+  for (int k = 0; k <= nz-1; k++){
+    for (int j = 0; j <= ny-1; j++){
+		for (int i = 0; i <= nx-1; i++){		
+			myfile << gen[i][j][k] << endl;
+		}
+    }
+  }
+  // end
+  myfile.close();
+}
 
 int main(){
 
@@ -371,20 +413,20 @@ int main(){
   double dy = y_size/ny ;
   double dz = z_size/nz ; 
   double donor = 0;
-  double gx = -1.0;
+  double gx = -1;
   double gy = 0;
   double gz = 0;
-  int t_max = 100;
+  int t_max = 5000;
   int it_max = 1000; //for poisson iteration
-  double eps = 7; //for poisson iteration
+  double eps = 0.2; //for poisson iteration
 
 
   
   //double u_in = 0;
-  double Re =  180;//1500;
+  double Re =  50;//1500;
   
   //double ts = Re/((1/pow(dx,2))+(1/pow(dy,2)))/2*1.1; // choose ts based on 3.5 with a sf of 1.1
-  double ts = 0.01;
+  double ts = 0.001;
 
   
   ////////////////////////////////////////////////////CREATE ARRAYS///////////////////////////////////////////
@@ -502,18 +544,21 @@ int main(){
     comp_FG(u, v, w, F, G, H, dx, dy, dz, donor, Re, gx, gy, gz, ts, nx, ny, nz);
 
     comp_p_rhs( F, G, H, p_rhs, ts, dx, dy, dz, nx, ny, nz);
+    //cout << "F\n";
+    //visualization_planex(F, nx, ny,nz);
 
     comp_p( p, p_new, p_rhs, dx, dy, dz, nx, ny, nz, it_max, eps);
 
     finalcomp( u_new, v_new, w_new, F, G, H, p_new, ts, dx, dy, dz, nx, ny, nz);
-
+    
     setbound( u_new, v_new, w_new, p_new,p, nx, ny, nz);
     // write_result(u_new,nx , ny,t);
     alittlestepforhumankind ( u, u_new, v, v_new, w, w_new, nx, ny, nz);
-    //cout << "u\n";
+    cout << "u\n";
     //visualization_planex(u_new, nx, ny,nz);
-    //cout << "pp\n";
+    cout << "pp\n";
     //visualization_planex(p_new, nx, ny,nz);
+    write_resultx(u_new,nx,ny,nz,t);
     //write_result(u_new,nx , ny,t);
     //visualization_v(v_new,nx,ny,t);
     //visualization_p(p_new,nx,ny,t);
