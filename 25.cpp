@@ -413,11 +413,11 @@ void write_resultx(double*** gen, int nx, int ny, int nz, int t){
   myfile << "ASCII\n";
   // Grid
   myfile << "DATASET STRUCTURED_GRID\n";
-  myfile << "DIMENSIONS " << nx << " " << ny << " " << nz << endl;
-  myfile << "POINTS " << (nx)*ny*(nz) << " float\n";
+  myfile << "DIMENSIONS " << nx-1 << " " << ny << " " << nz << endl;
+  myfile << "POINTS " << (nx-1)*ny*(nz) << " float\n";
   for (int k = 0; k <= nz-1; k++){
     for (int j = 0; j <= ny-1; j++){
-		for (int i = 0; i <= nx-1; i++){
+		for (int i = 0; i <= nx-2; i++){
 			myfile << i << " " << j << " " << k << endl;
 		}
     }
@@ -425,14 +425,14 @@ void write_resultx(double*** gen, int nx, int ny, int nz, int t){
   // Dataset
   myfile << "\n";
   myfile << "POINT_DATA";
-  myfile << " " << (nx)*ny*(nz) << "\n";
+  myfile << " " << (nx-1)*ny*(nz) << "\n";
   // Point data
   myfile << "\n";
   myfile << "SCALARS Test float 1\n";
   myfile << "LOOKUP_TABLE default\n";
   for (int k = 0; k <= nz-1; k++){
     for (int j = 0; j <= ny-1; j++){
-		for (int i = 0; i <= nx-1; i++){
+		for (int i = 0; i <= nx-2; i++){
 			myfile << gen[i][j][k] << endl;
 		}
     }
@@ -443,9 +443,9 @@ void write_resultx(double*** gen, int nx, int ny, int nz, int t){
 
 int main(){
 
-  int nx = 11;
-  int ny = 11;
-  int nz = 7;
+  int nx = 41;
+  int ny = 21;
+  int nz = 21;
   double x_size = 4.0*3.1416;//streamwise
   double y_size = 2.0*3.1416;//spanwise
   double z_size = 2.0;//chanel thickness
@@ -456,9 +456,9 @@ int main(){
   double gx = 1;
   double gy = 0;
   double gz = 0;
-  int t_max = 100000;
-  int it_max = 5000; //for poisson iteration
-  double eps = 0.05; //for poisson iteration
+  int t_max = 1200000;
+  int it_max = 10000; //for poisson iteration
+  double eps = 0.1; //for poisson iteration
 
 
 
@@ -466,7 +466,7 @@ int main(){
   double Re =  50;//1500;
 
   //double ts = Re/((1/pow(dx,2))+(1/pow(dy,2)))/2*1.1; // choose ts based on 3.5 with a sf of 1.1
-  double ts = 0.001;
+  double ts = 0.0001;
 
 
   ////////////////////////////////////////////////////CREATE ARRAYS///////////////////////////////////////////
@@ -595,7 +595,7 @@ int main(){
     // write_result(u_new,nx , ny,t);
     alittlestepforhumankind ( u, u_new, v, v_new, w, w_new,p, p_new, nx, ny, nz);
     cout << "u\n";
-    visualization_planex(u_new, nx, ny,nz);
+    //visualization_planex(u_new, nx, ny,nz);
     cout << "pp\n";
     //visualization_planex(p_new, nx, ny,nz);
     //write_resultx(u_new,nx,ny,nz,t);
