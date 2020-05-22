@@ -407,11 +407,11 @@ void write_result(double*** gen, double dx, double dy, double dz,int nx, int ny,
     myfile << "ASCII\n";
     // Grid
     myfile << "DATASET STRUCTURED_GRID\n";
-    myfile << "DIMENSIONS " << nx - 1 << " " << ny << " " << nz << endl;
-    myfile << "POINTS " << (nx - 1) * ny * (nz) << " float\n";
+    myfile << "DIMENSIONS " << nx  << " " << ny << " " << nz << endl;
+    myfile << "POINTS " << (nx ) * ny * (nz) << " float\n";
     for (int k = 0; k <= nz - 1; k++) {
         for (int j = 0; j <= ny - 1; j++) {
-            for (int i = 0; i <= nx - 2; i++) {
+            for (int i = 0; i <= nx - 1; i++) {
                 myfile << i * dx << " " << j *dy << " " << k * dz << endl;
             }
         }
@@ -419,14 +419,14 @@ void write_result(double*** gen, double dx, double dy, double dz,int nx, int ny,
     // Dataset
     myfile << "\n";
     myfile << "POINT_DATA";
-    myfile << " " << (nx - 1) * ny * (nz) << "\n";
+    myfile << " " << (nx ) * ny * (nz) << "\n";
     // Point data
     myfile << "\n";
     myfile << "SCALARS "+x+" float 1\n";
     myfile << "LOOKUP_TABLE default\n";
     for (int k = 0; k <= nz - 1; k++) {
         for (int j = 0; j <= ny - 1; j++) {
-            for (int i = 0; i <= nx - 2; i++) {
+            for (int i = 0; i <= nx - 1; i++) {
                 myfile << gen[i][j][k] << endl;
             }
         }
@@ -603,6 +603,7 @@ int main() {
         //visualization_planex(p_new, nx, ny,nz);
         write_result(u_new, dx,dy,dz, nx, ny, nz, t, "u");
         write_result(v_new, dx, dy, dz, nx, ny, nz, t, "v");
+        write_result(w_new, dx, dy, dz, nx, ny, nz, t, "w");
         write_result(p_new, dx, dy, dz, nx, ny, nz, t, "p");
         //write_result(u_new,nx , ny,t);
         //visualization_v(v_new,nx,ny,t);
