@@ -282,7 +282,7 @@ void write_result(double **var,double dx, double dy, int nx, int ny, int ts, str
   myfile << "ASCII\n";
   // Grid
   myfile << "DATASET STRUCTURED_GRID\n";
-  myfile << "DIMENSIONS " << nx << " " << 1 << " " << ny << "\n";
+  myfile << "DIMENSIONS " << nx << " " << ny << " " << 1 << "\n";
   myfile << "POINTS " << nx*(ny) << " float\n";
   for (int j = 0; j <= ny-1; j++){
     for (int i = 0; i <= nx-1; i++){
@@ -421,13 +421,11 @@ int main() {
         setbound(u_new, v_new, nx, ny);
         alittlestepforhumankind(u, u_new, v, v_new,nx, ny);
         cout << "u\n";
-        //visualization_planex(u_new, nx, ny);
-        //visualization_planex(p_new, nx, ny);
         cout << "pp\n";
         cout << u_new[nx-4][15];
-        //visualization_planex(p_new, nx, ny,nz);
         write_result(u_new,dx,dy,nx , ny,t,"u");
         write_result(p_new,dx,dy,nx , ny,t,"p");
+        write_result(v_new,dx,dy,nx , ny,t,"v");
     }
 
 }
